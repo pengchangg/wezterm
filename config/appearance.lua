@@ -36,7 +36,7 @@ Config.command_palette_rows = 20
 Config.cursor_blink_ease_in = "EaseIn"
 Config.cursor_blink_ease_out = "EaseOut"
 Config.cursor_blink_rate = 500
-Config.default_cursor_style = "BlinkingUnderline"
+Config.default_cursor_style = "BlinkingBlock"
 Config.cursor_thickness = 1
 Config.force_reverse_video_cursor = true
 
