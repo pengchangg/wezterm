@@ -24,8 +24,17 @@ wezterm.on("format-tab-title", function(tab, _, _, cfg, _, max_width)
   }
 end)
 
+-- In-window flash (Windows toast often fails on portable installs)
 wezterm.on("window-config-reloaded", function(window, _)
-  window:toast_notification("WezTerm", "配置已重载", nil, 3000)
+  window:set_right_status(wezterm.format {
+    { Attribute = { Intensity = "Bold" } },
+    { Foreground = { Color = "#1E1E2E" } },
+    { Background = { Color = "#A6E3A1" } },
+    { Text = " RELOADED " },
+  })
+  wezterm.time.call_after(2.5, function()
+    window:set_right_status ""
+  end)
 end)
 
 -- Left status: show active mode (COPY_MODE / SEARCH_MODE)
