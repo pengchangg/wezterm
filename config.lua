@@ -12,8 +12,8 @@ config.exit_behavior = "Close"
 config.launch_menu = {
   { label = "dev205", args = { "tssh", "dev205" } },
   { label = "Wsl-Arch", args = { "wsl" } },
-  { label = "dev", args = { "tssh", "dev" } },
-  { label = "prod", args = { "tssh", "prod" } },
+  { label = "jump-dev", args = { "ssh", "dev" } },
+  { label = "jump-prod", args = { "ssh", "prod" } },
   { label = "rocky.home", args = { "tssh", "rocky.home" } },
 }
 

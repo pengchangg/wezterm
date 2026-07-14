@@ -24,6 +24,10 @@ wezterm.on("format-tab-title", function(tab, _, _, cfg, _, max_width)
   }
 end)
 
+wezterm.on("window-config-reloaded", function(window, _)
+  window:toast_notification("WezTerm", "配置已重载", nil, 3000)
+end)
+
 -- Left status: show active mode (COPY_MODE / SEARCH_MODE)
 wezterm.on("update-status", function(window, _)
   local key_table = window:active_key_table()

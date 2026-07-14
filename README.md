@@ -70,7 +70,7 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 | `Ctrl+Shift+S` | SSH 远程菜单（`launch_menu`） |
 | `Ctrl+=` / `Ctrl+-` / `Ctrl+0` | 字号增大 / 减小 / 重置 |
 | `Ctrl+Shift+P` | 命令面板 |
-| `Ctrl+Shift+R` | 重载配置 |
+| `Ctrl+Shift+R` | 重载配置（成功后右下角 toast 提示） |
 | `Ctrl+Shift+N` | 新窗口 |
 | `Ctrl+Shift+L` | Debug Overlay |
 | `Ctrl+Shift+Space` | Quick Select |
