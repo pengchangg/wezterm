@@ -49,7 +49,9 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 
 进入 Copy / Search 时，左侧会显示 `COPY_MODE` / `SEARCH_MODE`。
 
-重载配置成功时，标签栏右侧短暂显示 `RELOADED` 与当前 GPU（如 `Dx12|DiscreteGpu|设备名`）。
+标签栏右侧常驻系统占用（约 2 秒刷新）：`CPU 12%  MEM 45%  DOWN 1.2MB/s  UP 80KB/s`（见 `sysinfo.lua`）。
+
+重载配置成功时，右侧短暂改为 `RELOADED` + 当前 GPU（如 `Dx12|DiscreteGpu|设备名`）。
 
 ### 全局常用
 
