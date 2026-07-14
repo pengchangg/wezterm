@@ -58,6 +58,7 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 | 快捷键 | 作用 |
 |--------|------|
 | `Ctrl+Shift+C` / `V` | 复制 / 粘贴 |
+| `Shift+Insert` | 粘贴 |
 | `Ctrl+Shift+T` / `W` | 新建 / 关闭标签 |
 | `F2` | 重命名当前标签 |
 | `Ctrl+Shift+Q` | 关闭当前窗格 |

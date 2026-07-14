@@ -37,6 +37,7 @@ M.keys = {
   ------------------------------------------------------------
   { key = "c", mods = "CTRL|SHIFT", action = act.CopyTo "Clipboard" }, -- 复制
   { key = "v", mods = "CTRL|SHIFT", action = act.PasteFrom "Clipboard" }, -- 粘贴
+  { key = "Insert", mods = "SHIFT", action = act.PasteFrom "Clipboard" }, -- 粘贴（Shift+Insert）
   { key = "f", mods = "CTRL|SHIFT", action = act.Search "CurrentSelectionOrEmptyString" }, -- 搜索
   { key = "x", mods = "CTRL|SHIFT", action = act.ActivateCopyMode }, -- Copy Mode
   { key = "Space", mods = "CTRL|SHIFT", action = act.QuickSelect }, -- 快速选择
