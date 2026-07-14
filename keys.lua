@@ -1,5 +1,6 @@
 -- 快捷键与 Copy / Search 模式键位表
 local wezterm = require "wezterm"
+local platform = require "platform"
 local act = wezterm.action
 
 local M = {}
@@ -116,6 +117,25 @@ for i = 1, 24 do
     mods = "SHIFT",
     action = act.ActivateTab(i - 1),
   }
+end
+
+-- macOS：常用 Cmd（SUPER）等价绑定，与上方 Ctrl+Shift 并存
+if platform.is_macos then
+  local mac_keys = {
+    { key = "c", mods = "SUPER", action = act.CopyTo "Clipboard" },
+    { key = "v", mods = "SUPER", action = act.PasteFrom "Clipboard" },
+    { key = "t", mods = "SUPER", action = act.SpawnTab "CurrentPaneDomain" },
+    { key = "w", mods = "SUPER", action = act.CloseCurrentTab { confirm = true } },
+    { key = "n", mods = "SUPER", action = act.SpawnWindow },
+    { key = "f", mods = "SUPER", action = act.Search "CurrentSelectionOrEmptyString" },
+    { key = "=", mods = "SUPER", action = act.IncreaseFontSize },
+    { key = "-", mods = "SUPER", action = act.DecreaseFontSize },
+    { key = "0", mods = "SUPER", action = act.ResetFontSize },
+    { key = "q", mods = "SUPER", action = act.CloseCurrentPane { confirm = true } },
+  }
+  for _, binding in ipairs(mac_keys) do
+    M.keys[#M.keys + 1] = binding
+  end
 end
 
 ------------------------------------------------------------

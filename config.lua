@@ -1,14 +1,17 @@
 -- WezTerm 外观 / Shell / 字体 / 标签栏 / GPU 等主配置
 local wezterm = require "wezterm"
+local platform = require "platform"
 local gpu = require "gpu"
 
 local config = {}
 
 ------------------------------------------------------------
--- Shell（Windows）
+-- Shell
 ------------------------------------------------------------
--- 默认启动程序（PowerShell 7）
-config.default_prog = { "D:\\PowerShell-7.5.4-win-x64\\pwsh.exe" }
+-- Windows：PowerShell 7；macOS：不设 default_prog，跟随系统登录 Shell
+if platform.is_windows then
+  config.default_prog = { "D:\\PowerShell-7.5.4-win-x64\\pwsh.exe" }
+end
 -- 新标签默认工作目录：用户主目录
 config.default_cwd = wezterm.home_dir
 -- 进程退出后关闭窗格
@@ -20,11 +23,13 @@ config.exit_behavior = "Close"
 ------------------------------------------------------------
 config.launch_menu = {
   { label = "dev205", args = { "tssh", "dev205" } },
-  { label = "Wsl-Arch", args = { "wsl" } },
   { label = "jump-dev", args = { "tssh", "dev" } },
   { label = "jump-prod", args = { "tssh", "prod" } },
   { label = "rocky.home", args = { "tssh", "rocky.home" } },
 }
+if platform.is_windows then
+  table.insert(config.launch_menu, 2, { label = "Wsl-Arch", args = { "wsl" } })
+end
 
 ------------------------------------------------------------
 -- 外观
@@ -53,9 +58,14 @@ config.force_reverse_video_cursor = true
 config.window_padding = { left = 12, right = 12, top = 10, bottom = 10 }
 -- 窗口装饰：无原生标题栏，最小化/最大化/关闭并入标签栏，可调整大小
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
--- 集成标题按钮靠右，Windows 风格
-config.integrated_title_button_alignment = "Right"
-config.integrated_title_button_style = "Windows"
+-- 集成标题按钮：Windows 靠右；macOS 靠左原生风格
+if platform.is_macos then
+  config.integrated_title_button_alignment = "Left"
+  config.integrated_title_button_style = "MacOsNative"
+else
+  config.integrated_title_button_alignment = "Right"
+  config.integrated_title_button_style = "Windows"
+end
 config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
 -- 关闭窗口时始终确认
 config.window_close_confirmation = "AlwaysPrompt"

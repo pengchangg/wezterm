@@ -1,11 +1,12 @@
--- Windows WebGPU 适配器选择
+-- WebGPU 适配器选择
 -- 设备优先级：离散显卡 > 集显 > Other > CPU
--- 后端优先级：Dx12 > Vulkan > OpenGL
+-- 后端：Windows Dx12 > Vulkan > Gl；macOS Metal
 
 local wezterm = require "wezterm"
+local platform = require "platform"
 
--- 可选图形后端（按偏好排序）
-local BACKENDS = { "Dx12", "Vulkan", "Gl" }
+-- 可选图形后端（按平台与偏好排序）
+local BACKENDS = platform.is_macos and { "Metal" } or { "Dx12", "Vulkan", "Gl" }
 -- 可选设备类型（按性能偏好排序）
 local DEVICE_PRIORITY = { "DiscreteGpu", "IntegratedGpu", "Other", "Cpu" }
 

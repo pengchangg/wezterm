@@ -2,7 +2,6 @@
 local wezterm = require "wezterm"
 local config = require "config"
 local keys = require "keys"
-local gpu = require "gpu"
 
 -- 将快捷键模块字段（keys / key_tables 等）合并进主配置
 for k, v in pairs(keys) do
