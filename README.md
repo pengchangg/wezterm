@@ -30,7 +30,8 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 | 字号 | `12.5` |
 | 行高 | `1.2` |
 | 光标 | `BlinkingBlock`，闪烁 500ms |
-| 标签栏 | 底部、非 fancy、最大宽度 18 |
+| 标签栏 | 顶部；`INTEGRATED_BUTTONS` 合并窗口按钮，无原生标题栏；非 fancy、最大宽度 18 |
+| 窗口装饰 | `INTEGRATED_BUTTONS\|RESIZE`（拖动标签栏或 `Ctrl+Shift` 拖动画布） |
 | 默认目录 | 用户主目录 |
 | 关闭确认 | 开启；常见 shell 进程可跳过确认 |
 | 渲染 | `WebGpu` |

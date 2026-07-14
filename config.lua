@@ -23,6 +23,7 @@ config.cursor_thickness = 1
 config.force_reverse_video_cursor = true
 
 config.window_padding = { left = 2, right = 2, top = 2, bottom = 1 }
+config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.integrated_title_button_alignment = "Right"
 config.integrated_title_button_style = "Windows"
 config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
@@ -66,7 +67,7 @@ config.show_tab_index_in_tab_bar = false
 config.show_tabs_in_tab_bar = true
 config.switch_to_last_active_tab_when_closing_tab = false
 config.tab_and_split_indices_are_zero_based = false
-config.tab_bar_at_bottom = true
+config.tab_bar_at_bottom = false
 config.tab_max_width = 18
 config.use_fancy_tab_bar = false
 
