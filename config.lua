@@ -30,7 +30,7 @@ config.launch_menu = {
 -- 外观
 ------------------------------------------------------------
 -- 配色方案（WezTerm 内置名）
-config.color_scheme = "Catppuccin Mocha"
+config.color_scheme = "Tokyo Night"
 -- 粗体同时加亮 ANSI 颜色
 config.bold_brightens_ansi_colors = "BrightAndBold"
 -- 显示滚动条
