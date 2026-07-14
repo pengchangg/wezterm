@@ -1,8 +1,8 @@
-local Config = require("utils.class.config"):new()
+local config = require "config"
+local keys = require "keys"
 
-require "events.update-status"
-require "events.format-tab-title"
-require "events.new-tab-button-click"
-require "events.augment-command-palette"
+for k, v in pairs(keys) do
+  config[k] = v
+end
 
-return Config:add("config"):add "mappings"
+return config

@@ -1,0 +1,140 @@
+local wezterm = require "wezterm"
+local gpu = require "gpu"
+
+local config = {}
+
+-- Shell (Windows)
+config.default_prog = { "D:\\PowerShell-7.5.4-win-x64\\pwsh.exe" }
+config.default_cwd = wezterm.home_dir
+config.exit_behavior = "Close"
+
+-- Appearance
+config.color_scheme = "Kanagawa (Wave)"
+config.bold_brightens_ansi_colors = "BrightAndBold"
+config.enable_scroll_bar = true
+config.hide_mouse_cursor_when_typing = true
+config.audible_bell = "SystemBeep"
+
+config.cursor_blink_ease_in = "EaseIn"
+config.cursor_blink_ease_out = "EaseOut"
+config.cursor_blink_rate = 500
+config.default_cursor_style = "BlinkingBlock"
+config.cursor_thickness = 1
+config.force_reverse_video_cursor = true
+
+config.window_padding = { left = 2, right = 2, top = 2, bottom = 1 }
+config.integrated_title_button_alignment = "Right"
+config.integrated_title_button_style = "Windows"
+config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
+config.window_close_confirmation = "AlwaysPrompt"
+config.clean_exit_codes = { 130 }
+config.skip_close_confirmation_for_processes_named = {
+  "bash",
+  "sh",
+  "zsh",
+  "fish",
+  "tmux",
+  "nu",
+  "cmd.exe",
+  "pwsh.exe",
+  "powershell.exe",
+}
+
+-- Font
+config.adjust_window_size_when_changing_font_size = false
+config.allow_square_glyphs_to_overflow_width = "WhenFollowedBySpace"
+config.anti_alias_custom_block_glyphs = true
+config.font_size = 12
+config.underline_position = -2.5
+config.underline_thickness = "2px"
+config.warn_about_missing_glyphs = false
+
+config.font = wezterm.font_with_fallback {
+  {
+    family = "Cascadia Code NF",
+    weight = "Regular",
+    harfbuzz_features = {
+      "cv06",
+      "cv12",
+      "cv14",
+      "cv16",
+      "cv25",
+      "cv26",
+      "cv28",
+      "cv29",
+      "cv31",
+      "cv32",
+      "ss03",
+      "ss04",
+      "ss05",
+      "ss07",
+      "ss09",
+    },
+  },
+}
+
+local monaspace_features = {
+  "dlig",
+  "ss01",
+  "ss02",
+  "ss03",
+  "ss04",
+  "ss05",
+  "ss06",
+  "ss07",
+  "ss08",
+}
+
+config.font_rules = {
+  {
+    intensity = "Normal",
+    italic = true,
+    font = wezterm.font_with_fallback {
+      {
+        family = "Monaspace Radon",
+        weight = "Regular",
+        stretch = "Normal",
+        harfbuzz_features = monaspace_features,
+      },
+      { family = "Symbols Nerd Font" },
+    },
+  },
+  {
+    intensity = "Bold",
+    italic = true,
+    font = wezterm.font_with_fallback {
+      {
+        family = "Monaspace Krypton Var",
+        style = "Italic",
+        weight = "ExtraBold",
+        harfbuzz_features = monaspace_features,
+        scale = 1.1,
+      },
+      { family = "Symbols Nerd Font" },
+    },
+  },
+}
+
+-- Tab bar
+config.enable_tab_bar = true
+config.hide_tab_bar_if_only_one_tab = false
+config.show_new_tab_button_in_tab_bar = true
+config.show_tab_index_in_tab_bar = false
+config.show_tabs_in_tab_bar = true
+config.switch_to_last_active_tab_when_closing_tab = false
+config.tab_and_split_indices_are_zero_based = false
+config.tab_bar_at_bottom = true
+config.tab_max_width = 25
+config.use_fancy_tab_bar = false
+
+-- GPU
+config.front_end = "WebGpu"
+config.webgpu_force_fallback_adapter = false
+config.webgpu_preferred_adapter = gpu.pick_best()
+
+local battery = wezterm.battery_info()[1]
+config.webgpu_power_preference = (battery and battery.state_of_charge < 0.35)
+    and "LowPower"
+  or "HighPerformance"
+
+return config
