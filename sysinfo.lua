@@ -7,8 +7,13 @@ local M = {}
 
 local CACHE_TTL_SEC = 1
 
--- 上次对外展示的文案与时间
-local cached_text = "CPU --  MEM --  DOWN --  UP --"
+-- 上次对外展示的分段数据与时间
+local cached_parts = {
+  cpu = "--",
+  mem = "--",
+  down = "--",
+  up = "--",
+}
 local cached_at = 0
 
 -- 网络差分用的上一次字节计数
@@ -74,17 +79,17 @@ local function sample_raw()
   }
 end
 
----刷新缓存并返回状态栏文案
-function M.status_text()
+---刷新缓存并返回分段数据（供状态栏配色）
+function M.status_parts()
   local t = now_sec()
   if (t - cached_at) < CACHE_TTL_SEC then
-    return cached_text
+    return cached_parts
   end
 
   local sample = sample_raw()
   if not sample then
     cached_at = t
-    return cached_text
+    return cached_parts
   end
 
   -- 计算网络速率（需要两次有效采样）
@@ -104,15 +109,20 @@ function M.status_text()
 
   prev_rx, prev_tx, prev_net_at = sample.rx, sample.tx, t
 
-  cached_text = string.format(
-    "CPU %d%%  MEM %d%%  DOWN %s  UP %s",
-    sample.cpu,
-    sample.mem,
-    format_rate(last_down),
-    format_rate(last_up)
-  )
+  cached_parts = {
+    cpu = tostring(sample.cpu) .. "%",
+    mem = tostring(sample.mem) .. "%",
+    down = format_rate(last_down),
+    up = format_rate(last_up),
+  }
   cached_at = t
-  return cached_text
+  return cached_parts
+end
+
+---纯文本（调试 / 兼容）
+function M.status_text()
+  local p = M.status_parts()
+  return string.format("CPU %s  MEM %s  DOWN %s  UP %s", p.cpu, p.mem, p.down, p.up)
 end
 
 return M

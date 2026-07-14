@@ -42,6 +42,39 @@ wezterm.on("window-config-reloaded", function(_, _)
 end)
 
 ------------------------------------------------------------
+-- 状态栏配色（对齐 Tokyo Night）
+------------------------------------------------------------
+local C = {
+  bg = "#1a1b26",
+  cpu_bg = "#3d59a1",
+  cpu_fg = "#c0caf5",
+  mem_bg = "#bb9af7",
+  mem_fg = "#1a1b26",
+  down_bg = "#2f3549",
+  down_fg = "#7dcfff",
+  up_bg = "#2f3549",
+  up_fg = "#9ece6a",
+  reload_bg = "#9ece6a",
+  reload_fg = "#1a1b26",
+  gpu_bg = "#414868",
+  gpu_fg = "#c0caf5",
+  mode_bg = "#7aa2f7",
+  mode_fg = "#1a1b26",
+}
+
+local function push_seg(elements, bg, fg, text, bold)
+  if bold then
+    elements[#elements + 1] = { Attribute = { Intensity = "Bold" } }
+  end
+  elements[#elements + 1] = { Foreground = { Color = fg } }
+  elements[#elements + 1] = { Background = { Color = bg } }
+  elements[#elements + 1] = { Text = text }
+  if bold then
+    elements[#elements + 1] = { Attribute = { Intensity = "Normal" } }
+  end
+end
+
+------------------------------------------------------------
 -- 状态栏：左侧模式名；右侧系统占用 / 重载提示
 ------------------------------------------------------------
 wezterm.on("update-status", function(window, _)
@@ -52,30 +85,25 @@ wezterm.on("update-status", function(window, _)
   else
     window:set_left_status(wezterm.format {
       { Attribute = { Intensity = "Bold" } },
-      { Foreground = { Color = "#F2ECBC" } },
-      { Background = { Color = "#4D699B" } },
+      { Foreground = { Color = C.mode_fg } },
+      { Background = { Color = C.mode_bg } },
       { Text = " " .. key_table:upper() .. " " },
     })
   end
 
-  -- 右侧：重载提示优先，否则显示 CPU / 内存 / 网络
+  -- 右侧：重载提示优先，否则分段显示 CPU / 内存 / 网络
+  local elements = {}
   if wezterm.GLOBAL.show_reloaded then
-    window:set_right_status(wezterm.format {
-      { Attribute = { Intensity = "Bold" } },
-      { Foreground = { Color = "#1E1E2E" } },
-      { Background = { Color = "#A6E3A1" } },
-      { Text = " RELOADED " },
-      { Foreground = { Color = "#CDD6F4" } },
-      { Background = { Color = "#313244" } },
-      { Text = " " .. gpu.status_text() .. " " },
-    })
+    push_seg(elements, C.reload_bg, C.reload_fg, " RELOADED ", true)
+    push_seg(elements, C.gpu_bg, C.gpu_fg, " " .. gpu.status_text() .. " ", false)
   else
-    window:set_right_status(wezterm.format {
-      { Foreground = { Color = "#CDD6F4" } },
-      { Background = { Color = "#313244" } },
-      { Text = " " .. sysinfo.status_text() .. " " },
-    })
+    local p = sysinfo.status_parts()
+    push_seg(elements, C.cpu_bg, C.cpu_fg, " CPU " .. p.cpu .. " ", true)
+    push_seg(elements, C.mem_bg, C.mem_fg, " MEM " .. p.mem .. " ", true)
+    push_seg(elements, C.down_bg, C.down_fg, " ↓ " .. p.down .. " ", false)
+    push_seg(elements, C.up_bg, C.up_fg, " ↑ " .. p.up .. " ", false)
   end
+  window:set_right_status(wezterm.format(elements))
 end)
 
 return config
