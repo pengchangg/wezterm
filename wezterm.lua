@@ -3,7 +3,6 @@ local wezterm = require "wezterm"
 local config = require "config"
 local keys = require "keys"
 local gpu = require "gpu"
-local sysinfo = require "sysinfo"
 
 -- 将快捷键模块字段（keys / key_tables 等）合并进主配置
 for k, v in pairs(keys) do
@@ -36,7 +35,7 @@ end)
 ------------------------------------------------------------
 wezterm.on("window-config-reloaded", function(_, _)
   wezterm.GLOBAL.show_reloaded = true
-  wezterm.time.call_after(2.5, function()
+  wezterm.time.call_after(1.5, function()
     wezterm.GLOBAL.show_reloaded = false
   end)
 end)
@@ -97,14 +96,8 @@ wezterm.on("update-status", function(window, _)
   local elements = {}
   if wezterm.GLOBAL.show_reloaded then
     push_seg(elements, C.reload_bg, C.reload_fg, " RELOADED ", true)
-    push_seg(elements, C.gpu_bg, C.gpu_fg, " " .. gpu.status_text() .. " ", false)
   else
-    local p = sysinfo.status_parts()
     local clock = wezterm.strftime "%m/%d %H:%M"
-    push_seg(elements, C.cpu_bg, C.cpu_fg, " CPU " .. p.cpu .. " ", true)
-    push_seg(elements, C.mem_bg, C.mem_fg, " MEM " .. p.mem .. " ", true)
-    push_seg(elements, C.down_bg, C.down_fg, " ↓ " .. p.down .. " ", false)
-    push_seg(elements, C.up_bg, C.up_fg, " ↑ " .. p.up .. " ", false)
     push_seg(elements, C.clock_bg, C.clock_fg, " " .. clock .. " ", true)
   end
   window:set_right_status(wezterm.format(elements))
