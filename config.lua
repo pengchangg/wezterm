@@ -31,7 +31,7 @@ config.default_cursor_style = "BlinkingBlock"
 config.cursor_thickness = 1
 config.force_reverse_video_cursor = true
 
-config.window_padding = { left = 2, right = 2, top = 2, bottom = 1 }
+config.window_padding = { left = 12, right = 12, top = 10, bottom = 10 }
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
 config.integrated_title_button_alignment = "Right"
 config.integrated_title_button_style = "Windows"
