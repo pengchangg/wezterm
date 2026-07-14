@@ -5,7 +5,7 @@ local wezterm = require "wezterm"
 
 local M = {}
 
-local CACHE_TTL_SEC = 1
+local CACHE_TTL_SEC = 0.5
 
 -- 上次对外展示的分段数据与时间
 local cached_parts = {

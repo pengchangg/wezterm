@@ -49,7 +49,7 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 
 进入 Copy / Search 时，左侧会显示 `COPY_MODE` / `SEARCH_MODE`。
 
-标签栏右侧常驻系统占用（约 2 秒刷新，Tokyo Night 分段配色）：`CPU` / `MEM` / `↓` / `↑`（见 `sysinfo.lua` + `wezterm.lua`）。
+标签栏右侧常驻系统占用与日期时间（约 2 秒刷新系统信息，Tokyo Night 分段配色）：`CPU` / `MEM` / `↓` / `↑` / `月/日 时:分`（见 `sysinfo.lua` + `wezterm.lua`）。
 
 重载配置成功时，右侧短暂改为 `RELOADED` + 当前 GPU（如 `Dx12|DiscreteGpu|设备名`）。
 

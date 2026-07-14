@@ -58,6 +58,8 @@ local C = {
   reload_fg = "#1a1b26",
   gpu_bg = "#414868",
   gpu_fg = "#c0caf5",
+  clock_bg = "#414868",
+  clock_fg = "#c0caf5",
   mode_bg = "#7aa2f7",
   mode_fg = "#1a1b26",
 }
@@ -98,10 +100,12 @@ wezterm.on("update-status", function(window, _)
     push_seg(elements, C.gpu_bg, C.gpu_fg, " " .. gpu.status_text() .. " ", false)
   else
     local p = sysinfo.status_parts()
+    local clock = wezterm.strftime "%m/%d %H:%M"
     push_seg(elements, C.cpu_bg, C.cpu_fg, " CPU " .. p.cpu .. " ", true)
     push_seg(elements, C.mem_bg, C.mem_fg, " MEM " .. p.mem .. " ", true)
     push_seg(elements, C.down_bg, C.down_fg, " ↓ " .. p.down .. " ", false)
     push_seg(elements, C.up_bg, C.up_fg, " ↑ " .. p.up .. " ", false)
+    push_seg(elements, C.clock_bg, C.clock_fg, " " .. clock .. " ", true)
   end
   window:set_right_status(wezterm.format(elements))
 end)
