@@ -49,4 +49,20 @@ function M.pick_best()
   return nil
 end
 
+---生成状态栏用的简短 GPU 描述，例如 "Dx12|Discrete|NVIDIA GeForce RTX 3060"
+function M.status_text()
+  local adapter = M.pick_best()
+  if not adapter then
+    return "WebGpu|default"
+  end
+
+  local name = adapter.name or "?"
+  -- 状态栏空间有限，截断过长设备名
+  if #name > 28 then
+    name = name:sub(1, 25) .. "..."
+  end
+
+  return string.format("%s|%s|%s", adapter.backend or "?", adapter.device_type or "?", name)
+end
+
 return M

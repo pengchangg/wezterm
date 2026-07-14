@@ -2,6 +2,7 @@
 local wezterm = require "wezterm"
 local config = require "config"
 local keys = require "keys"
+local gpu = require "gpu"
 
 -- 将快捷键模块字段（keys / key_tables 等）合并进主配置
 for k, v in pairs(keys) do
@@ -30,15 +31,18 @@ wezterm.on("format-tab-title", function(tab, _, _, cfg, _, max_width)
 end)
 
 ------------------------------------------------------------
--- 配置重载成功提示（标签栏右侧短暂显示 RELOADED）
--- 说明：Windows 便携版系统 toast 经常不显示，故用状态栏代替
+-- 配置重载成功：右侧短暂显示 RELOADED + 当前 GPU
 ------------------------------------------------------------
 wezterm.on("window-config-reloaded", function(window, _)
+  local gpu_text = gpu.status_text()
   window:set_right_status(wezterm.format {
     { Attribute = { Intensity = "Bold" } },
     { Foreground = { Color = "#1E1E2E" } },
     { Background = { Color = "#A6E3A1" } },
     { Text = " RELOADED " },
+    { Foreground = { Color = "#CDD6F4" } },
+    { Background = { Color = "#313244" } },
+    { Text = " " .. gpu_text .. " " },
   })
   -- 约 2.5 秒后清除提示
   wezterm.time.call_after(2.5, function()

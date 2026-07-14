@@ -47,7 +47,9 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 
 已关闭 WezTerm 默认快捷键（`disable_default_key_bindings = true`）。无 Leader 键。
 
-进入 Copy / Search 时，左下角会显示 `COPY_MODE` / `SEARCH_MODE`。
+进入 Copy / Search 时，左侧会显示 `COPY_MODE` / `SEARCH_MODE`。
+
+重载配置成功时，标签栏右侧短暂显示 `RELOADED` 与当前 GPU（如 `Dx12|DiscreteGpu|设备名`）。
 
 ### 全局常用
 
