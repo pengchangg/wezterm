@@ -1,4 +1,5 @@
-local act = require("wezterm").action
+local wezterm = require "wezterm"
+local act = wezterm.action
 
 local M = {}
 
@@ -18,6 +19,18 @@ M.keys = {
   { key = "p", mods = "CTRL|SHIFT", action = act.ActivateCommandPalette },
   { key = "r", mods = "CTRL|SHIFT", action = act.ReloadConfiguration },
   { key = "t", mods = "CTRL|SHIFT", action = act.SpawnTab "CurrentPaneDomain" },
+  {
+    key = "F2",
+    mods = "",
+    action = act.PromptInputLine {
+      description = "Rename tab",
+      action = wezterm.action_callback(function(window, _, line)
+        if line then
+          window:active_tab():set_title(line)
+        end
+      end),
+    },
+  },
   {
     key = "u",
     mods = "CTRL|SHIFT",

@@ -55,6 +55,7 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 |--------|------|
 | `Ctrl+Shift+C` / `V` | 复制 / 粘贴 |
 | `Ctrl+Shift+T` / `W` | 新建 / 关闭标签 |
+| `F2` | 重命名当前标签 |
 | `Ctrl+Shift+Q` | 关闭当前窗格 |
 | `Ctrl+Tab` / `Ctrl+Shift+Tab` | 下一 / 上一标签 |
 | `Shift+F1`…`F24` | 切换到对应标签 |
