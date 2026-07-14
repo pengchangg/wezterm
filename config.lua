@@ -8,6 +8,15 @@ config.default_prog = { "D:\\PowerShell-7.5.4-win-x64\\pwsh.exe" }
 config.default_cwd = wezterm.home_dir
 config.exit_behavior = "Close"
 
+-- Fixed SSH / remote launch list (Ctrl+Shift+S)
+config.launch_menu = {
+  { label = "dev205", args = { "tssh", "dev205" } },
+  { label = "Wsl-Arch", args = { "wsl" } },
+  { label = "dev", args = { "tssh", "dev" } },
+  { label = "prod", args = { "tssh", "prod" } },
+  { label = "rocky.home", args = { "tssh", "rocky.home" } },
+}
+
 -- Appearance
 config.color_scheme = "Catppuccin Mocha"
 config.bold_brightens_ansi_colors = "BrightAndBold"
@@ -17,7 +26,7 @@ config.audible_bell = "SystemBeep"
 
 config.cursor_blink_ease_in = "EaseIn"
 config.cursor_blink_ease_out = "EaseOut"
-config.cursor_blink_rate = 500
+config.cursor_blink_rate = 1000
 config.default_cursor_style = "BlinkingBlock"
 config.cursor_thickness = 1
 config.force_reverse_video_cursor = true

@@ -25,7 +25,7 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 
 | 项 | 当前值 |
 |----|--------|
-| 配色 | `Kanagawa (Lotus)`（浅色） |
+| 配色 | `Catppuccin Mocha`|
 | 字体 | `JetBrains Mono NF` |
 | 字号 | `12.5` |
 | 行高 | `1.2` |
@@ -66,6 +66,7 @@ keys.lua      # 常用快捷键、Copy/Search 模式键位
 | `Ctrl+Shift+Z` | 窗格缩放切换 |
 | `Ctrl+Shift+X` | Copy Mode |
 | `Ctrl+Shift+F` | 搜索 |
+| `Ctrl+Shift+S` | SSH 远程菜单（`launch_menu`） |
 | `Ctrl+=` / `Ctrl+-` / `Ctrl+0` | 字号增大 / 减小 / 重置 |
 | `Ctrl+Shift+P` | 命令面板 |
 | `Ctrl+Shift+R` | 重载配置 |
@@ -97,6 +98,7 @@ Vim 风格移动与选择：`HJKL`、词跳转、`V/v/Ctrl+V` 选区、`Y` 复�
 - **换 Shell**：改 `default_prog` 路径
 - **换主字体**：改 `config.font` 的 `family`
 - **改快捷键**：改 `keys.lua` 中 `M.keys`
+- **增删 SSH 主机**：改 `config.lua` 中 `launch_menu`，例如 `{ label = "生产机", args = { "ssh", "prod" } }`（需本机 PATH 有 `ssh`）
 
 修改后按 `Ctrl+Shift+R` 重载，或重启 WezTerm。
 

@@ -36,6 +36,14 @@ M.keys = {
   { key = "Insert", mods = "CTRL", action = act.CopyTo "PrimarySelection" },
   { key = "Space", mods = "CTRL|SHIFT", action = act.QuickSelect },
   {
+    key = "s",
+    mods = "CTRL|SHIFT",
+    action = act.ShowLauncherArgs {
+      title = "SSH",
+      flags = "FUZZY|LAUNCH_MENU_ITEMS",
+    },
+  },
+  {
     key = "t",
     mods = "SHIFT|ALT",
     action = act.ShowLauncherArgs {
