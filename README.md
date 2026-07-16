@@ -89,10 +89,12 @@ keys.lua      # 常用快捷键、Copy/Search 模式；macOS 额外 Cmd 绑定
 | `Ctrl+Shift+N` | 新窗口 |
 | `Ctrl+Shift+L` | Debug Overlay |
 | `Ctrl+Shift+Space` | Quick Select |
+| `Ctrl+Shift+O` | Quick Select 打开 URL（输入高亮前缀） |
 | `Ctrl+Shift+U` | 字符选择 |
 | `Alt+Enter` | 全屏 |
 | `Alt+Shift+T` | Launcher（模糊搜索） |
 | `PageUp` / `PageDown` | 按页滚动 |
+| `Ctrl+单击` | 打开光标下链接（默认单击仍可打开） |
 
 ### macOS 额外（Cmd）
 
@@ -104,6 +106,7 @@ keys.lua      # 常用快捷键、Copy/Search 模式；macOS 额外 Cmd 绑定
 | `Cmd+F` | 搜索 |
 | `Cmd+=` / `-` / `0` | 字号增大 / 减小 / 重置 |
 | `Cmd+Q` | 关闭当前窗格 |
+| `Cmd+单击` | 打开光标下链接 |
 
 ### Copy Mode（`Ctrl+Shift+X`）
 

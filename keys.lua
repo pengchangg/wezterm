@@ -43,6 +43,21 @@ M.keys = {
   { key = "x", mods = "CTRL|SHIFT", action = act.ActivateCopyMode }, -- Copy Mode
   { key = "Space", mods = "CTRL|SHIFT", action = act.QuickSelect }, -- 快速选择
   {
+    key = "o",
+    mods = "CTRL|SHIFT",
+    -- 快速选择 URL 并用系统浏览器打开（纯键盘）
+    action = act.QuickSelectArgs {
+      label = "open url",
+      patterns = {
+        "https?://\\S+",
+      },
+      action = wezterm.action_callback(function(window, pane)
+        local url = window:get_selection_text_for_pane(pane)
+        wezterm.open_with(url)
+      end),
+    },
+  },
+  {
     key = "u",
     mods = "CTRL|SHIFT",
     -- 字符选择面板
@@ -135,6 +150,41 @@ if platform.is_macos then
   }
   for _, binding in ipairs(mac_keys) do
     M.keys[#M.keys + 1] = binding
+  end
+end
+
+------------------------------------------------------------
+-- 鼠标：Ctrl+单击打开光标下超链接（保留默认单击打开）
+------------------------------------------------------------
+M.mouse_bindings = {
+  {
+    event = { Up = { streak = 1, button = "Left" } },
+    mods = "CTRL",
+    action = act.OpenLinkAtMouseCursor,
+  },
+  {
+    event = { Down = { streak = 1, button = "Left" } },
+    mods = "CTRL",
+    action = act.Nop, -- 避免 Down 仍发给 vim/tmux 等鼠标追踪程序
+  },
+}
+
+-- macOS：Cmd+单击等价打开链接
+if platform.is_macos then
+  local mac_mouse = {
+    {
+      event = { Up = { streak = 1, button = "Left" } },
+      mods = "SUPER",
+      action = act.OpenLinkAtMouseCursor,
+    },
+    {
+      event = { Down = { streak = 1, button = "Left" } },
+      mods = "SUPER",
+      action = act.Nop,
+    },
+  }
+  for _, binding in ipairs(mac_mouse) do
+    M.mouse_bindings[#M.mouse_bindings + 1] = binding
   end
 end
 
