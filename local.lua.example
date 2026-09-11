@@ -1,0 +1,17 @@
+-- 复制为 local.lua 后按本机环境修改；local.lua 不会提交到 Git。
+return {
+  -- 默认使用 PATH 中的 pwsh.exe；便携版可在这里指定绝对路径。
+  -- default_prog = { "D:\\Tools\\PowerShell\\pwsh.exe" },
+
+  -- default_cwd = "D:\\Code",
+  -- font_size = 12,
+
+  -- 固定 GPU 电源偏好；不设置时根据加载配置时的电量自动选择。
+  -- webgpu_power_preference = "HighPerformance", -- 或 "LowPower"
+
+  -- 本机远程主机；会追加到平台默认启动项之后。
+  launch_menu = {
+    -- { label = "development", args = { "tssh", "development" } },
+    -- { label = "production", args = { "ssh", "production" } },
+  },
+}
