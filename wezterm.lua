@@ -30,7 +30,7 @@ wezterm.on("format-tab-title", function(tab, _, _, cfg, _, max_width)
 end)
 
 ------------------------------------------------------------
--- 配置重载成功：短暂显示 RELOADED + GPU（由 update-status 绘制）
+-- 配置重载成功：短暂显示 RELOADED（由 update-status 绘制）
 ------------------------------------------------------------
 wezterm.on("window-config-reloaded", function(_, _)
   wezterm.GLOBAL.show_reloaded = true
@@ -43,19 +43,8 @@ end)
 -- 状态栏配色（对齐 Tokyo Night）
 ------------------------------------------------------------
 local C = {
-  bg = "#1a1b26",
-  cpu_bg = "#3d59a1",
-  cpu_fg = "#c0caf5",
-  mem_bg = "#bb9af7",
-  mem_fg = "#1a1b26",
-  down_bg = "#2f3549",
-  down_fg = "#7dcfff",
-  up_bg = "#2f3549",
-  up_fg = "#9ece6a",
   reload_bg = "#9ece6a",
   reload_fg = "#1a1b26",
-  gpu_bg = "#414868",
-  gpu_fg = "#c0caf5",
   clock_bg = "#414868",
   clock_fg = "#c0caf5",
   mode_bg = "#7aa2f7",
@@ -75,7 +64,7 @@ local function push_seg(elements, bg, fg, text, bold)
 end
 
 ------------------------------------------------------------
--- 状态栏：左侧模式名；右侧系统占用 / 重载提示
+-- 状态栏：左侧模式名；右侧日期时间 / 重载提示
 ------------------------------------------------------------
 wezterm.on("update-status", function(window, _)
   -- 左侧：Copy / Search 等模式
@@ -91,7 +80,7 @@ wezterm.on("update-status", function(window, _)
     })
   end
 
-  -- 右侧：重载提示优先，否则分段显示 CPU / 内存 / 网络
+  -- 右侧：重载提示优先，否则显示日期时间
   local elements = {}
   if wezterm.GLOBAL.show_reloaded then
     push_seg(elements, C.reload_bg, C.reload_fg, " RELOADED ", true)

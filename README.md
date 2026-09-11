@@ -1,25 +1,26 @@
 # WezTerm 配置说明（Windows / macOS）
 
-跨平台 WezTerm 配置：共用外观与 `Ctrl+Shift` 快捷键，通过 `platform.lua` 按系统分支处理 Shell、启动菜单、窗口按钮与 GPU。默认禁用 WezTerm 自带快捷键，改用本仓库定义的绑定。
+跨平台 WezTerm 配置：共用外观与 `Ctrl+Shift` 快捷键，通过 `platform.lua` 按系统分支处理 Shell、启动菜单、窗口按钮与 GPU，通过被 Git 忽略的 `local.lua` 保存本机路径和远程主机。默认禁用 WezTerm 自带快捷键，改用本仓库定义的绑定。
 
 ## 文件结构
 
 ```
-wezterm.lua   # 入口：合并 config + keys，标签标题与模式状态
-platform.lua  # 平台检测（Windows / macOS）
-config.lua    # 外观、字体、标签栏、Shell、启动菜单、GPU
-gpu.lua       # WebGPU 适配器选择（按平台后端）
-keys.lua      # 常用快捷键、Copy/Search 模式；macOS 额外 Cmd 绑定
+wezterm.lua       # 入口：合并 config + keys，标签标题与模式状态
+platform.lua      # 平台检测（Windows / macOS）
+config.lua        # 外观、字体、标签栏、Shell、启动菜单、GPU
+gpu.lua           # 按平台、电源偏好选择 WebGPU 适配器
+keys.lua          # 常用快捷键、Copy/Search 模式；macOS 额外 Cmd 绑定
+local.lua.example # 本机覆盖模板；复制为 local.lua 后使用
 ```
 
-加载流程：`wezterm.lua` → `require("config")`（内含 `platform` + `gpu`）→ 合并 `require("keys")` → 返回最终配置表。
+加载流程：`wezterm.lua` → `require("config")`（内含 `platform`、`gpu` 和可选的 `local.lua`）→ 合并 `require("keys")` → 返回最终配置表。
 
 ## 平台差异（`platform.lua`）
 
 | 项 | Windows | macOS |
 |----|---------|-------|
-| `default_prog` | PowerShell 7（绝对路径，见 `config.lua`） | **不设置**，跟随系统登录 Shell |
-| 启动菜单 | `tssh` 主机 + `Wsl-Arch` | 仅 `tssh` 主机（无 WSL） |
+| `default_prog` | PATH 中的 PowerShell 7，可由 `local.lua` 覆盖 | **不设置**，跟随系统登录 Shell |
+| 启动菜单 | `Wsl-Arch` + `local.lua` 本机启动项 | `local.lua` 本机启动项（无 WSL） |
 | 标题按钮 | 靠右，`Windows` 风格 | 靠左，`MacOsNative` |
 | GPU 后端 | Dx12 → Vulkan → Gl | Metal |
 | 快捷键 | `Ctrl+Shift` 等 | 同上 + 常用 `Cmd` 等价绑定 |
@@ -30,8 +31,8 @@ keys.lua      # 常用快捷键、Copy/Search 模式；macOS 额外 Cmd 绑定
 - 字体（两台均需安装同名家族）：
   - **CaskaydiaCove Nerd Font**（主字体）
   - **Symbols Nerd Font**（符号回退）
-- Windows：`D:\PowerShell-7.5.4-win-x64\pwsh.exe`（可在 `config.lua` 中修改）；PATH 中有 `tssh` / `wsl`（启动菜单用）
-- macOS：系统登录 Shell；若使用启动菜单，PATH 中需有 `tssh`
+- Windows：PATH 中有 PowerShell 7 的 `pwsh.exe`；若使用 WSL 启动项，PATH 中需有 `wsl`
+- Windows / macOS：若在本机启动菜单中使用 `tssh`，PATH 中需有对应命令
 
 ## 外观与行为（`config.lua`）
 
@@ -51,9 +52,11 @@ keys.lua      # 常用快捷键、Copy/Search 模式；macOS 额外 Cmd 绑定
 ## GPU（`gpu.lua` + `config.lua`）
 
 - 前端：`WebGpu`
-- 适配器优先级：离散卡 → 集显 → Other → CPU
-- 后端优先级：见上方平台表
-- 电量低于 35% 时切换为 `LowPower`，否则 `HighPerformance`
+- 高性能适配器优先级：离散卡 → 集显 → Other → CPU
+- 低功耗适配器优先级：集显 → Other → 离散卡 → CPU
+- 后端优先级：见上方平台表；Linux 等其他平台使用 Vulkan → Gl
+- 加载配置时电量低于 35% 使用 `LowPower`，否则使用 `HighPerformance`
+- 电量变化不会动态迁移正在使用的渲染器；重载配置或重启 WezTerm 后重新选择
 
 ## 快捷键（`keys.lua`）
 
@@ -125,16 +128,35 @@ Vim 风格移动与选择：`HJKL`、词跳转、`V/v/Ctrl+V` 选区、`Y` 复�
 ## 常见修改
 
 - **换配色**：改 `config.lua` 中 `color_scheme`（使用 WezTerm 内置方案名）
-- **换 Windows Shell**：改 `config.lua` 中 Windows 分支的 `default_prog` 路径
+- **换 Windows Shell**：在 `local.lua` 中设置 `default_prog`
+- **换默认目录 / 字号**：在 `local.lua` 中设置 `default_cwd` / `font_size`
+- **固定 GPU 策略**：在 `local.lua` 中设置 `webgpu_power_preference` 为 `HighPerformance` 或 `LowPower`
 - **换主字体**：改 `config.font` 的 `family`
 - **改快捷键**：改 `keys.lua` 中 `M.keys`（macOS Cmd 段在文件后半）
-- **增删 SSH 主机**：改 `config.lua` 中 `launch_menu`，例如 `{ label = "生产机", args = { "ssh", "prod" } }`（需本机 PATH 有对应命令）
+- **增删 SSH 主机**：改本机 `local.lua` 中的 `launch_menu`，例如 `{ label = "生产机", args = { "ssh", "prod" } }`（需本机 PATH 有对应命令）
+
+首次使用时可复制模板并填写本机配置：
+
+```sh
+cp local.lua.example local.lua
+```
+
+`local.lua` 支持以下白名单字段：`default_prog`、`default_cwd`、`font_size`、`webgpu_power_preference` 和 `launch_menu`。无此文件时仍可正常启动；格式错误或字段类型错误会写入 WezTerm 日志。
 
 修改后按 `Ctrl+Shift+R` 重载，或重启 WezTerm。
+
+## 配置验证
+
+```sh
+wezterm --config-file wezterm.lua show-keys
+wezterm --config-file wezterm.lua ls-fonts
+```
+
+也可打开 Debug Overlay 检查配置日志和实际使用的 GPU。
 
 ## 刻意未包含
 
 - Leader / 多级模态快捷键
 - 运行时配色 / 字体选择器
-- Linux 专用分支（非 Windows/macOS 时走共用默认且无 `default_prog`）
-- 本机 `local.lua` 覆盖（Windows pwsh 路径仍写在配置内）
+- Linux 专用 Shell 和窗口按钮配置
+- 工作区 / 项目启动器与会话恢复

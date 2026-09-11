@@ -1,69 +1,60 @@
 -- WebGPU 适配器选择
--- 设备优先级：离散显卡 > 集显 > Other > CPU
--- 后端：Windows Dx12 > Vulkan > Gl；macOS Metal
+-- 高性能：离散显卡 > 集显 > Other > CPU
+-- 低功耗：集显 > Other > 离散显卡 > CPU
+-- 后端：Windows Dx12 > Vulkan > Gl；macOS Metal；其他平台 Vulkan > Gl
 
 local wezterm = require "wezterm"
 local platform = require "platform"
 
--- 可选图形后端（按平台与偏好排序）
-local BACKENDS = platform.is_macos and { "Metal" } or { "Dx12", "Vulkan", "Gl" }
--- 可选设备类型（按性能偏好排序）
-local DEVICE_PRIORITY = { "DiscreteGpu", "IntegratedGpu", "Other", "Cpu" }
+local BACKENDS
+if platform.is_macos then
+  BACKENDS = { "Metal" }
+elseif platform.is_windows then
+  BACKENDS = { "Dx12", "Vulkan", "Gl" }
+else
+  BACKENDS = { "Vulkan", "Gl" }
+end
+
+local HIGH_PERFORMANCE_PRIORITY = { "DiscreteGpu", "IntegratedGpu", "Other", "Cpu" }
+local LOW_POWER_PRIORITY = { "IntegratedGpu", "Other", "DiscreteGpu", "Cpu" }
 
 local M = {}
 
----挑选当前机器上较优的 WebGPU 适配器；找不到则返回 nil（交给 WezTerm 默认）
-function M.pick_best()
-  -- 按 device_type -> backend 建索引
-  local by_type = {}
-
-  for _, adapter in ipairs(wezterm.gui.enumerate_gpus()) do
-    local t = adapter.device_type
-    if not by_type[t] then
-      by_type[t] = {}
-    end
-    by_type[t][adapter.backend] = adapter
-  end
-
-  -- 按设备优先级取第一档可用适配器表
-  local adapters
-  for _, device_type in ipairs(DEVICE_PRIORITY) do
-    if by_type[device_type] then
-      adapters = by_type[device_type]
-      break
-    end
-  end
-
-  if not adapters then
-    wezterm.log_error "未找到 GPU 适配器，使用默认适配器。"
-    return nil
-  end
-
-  -- 在该档设备中按后端优先级挑选
-  for _, backend in ipairs(BACKENDS) do
-    if adapters[backend] then
-      return adapters[backend]
-    end
-  end
-
-  wezterm.log_error "首选 GPU 后端不可用，使用默认适配器。"
-  return nil
+local function adapter_sort_key(adapter)
+  return table.concat({
+    adapter.name or "",
+    adapter.driver or "",
+    adapter.driver_info or "",
+  }, "\0")
 end
 
----生成状态栏用的简短 GPU 描述，例如 "Dx12|Discrete|NVIDIA GeForce RTX 3060"
-function M.status_text()
-  local adapter = M.pick_best()
-  if not adapter then
-    return "WebGpu|default"
+---按电源偏好挑选 WebGPU 适配器；找不到则返回 nil（交给 WezTerm 默认）
+function M.pick_best(power_preference)
+  local device_priority = power_preference == "LowPower" and LOW_POWER_PRIORITY
+    or HIGH_PERFORMANCE_PRIORITY
+  local adapters = wezterm.gui.enumerate_gpus()
+
+  -- 按设备类型和后端逐级尝试，避免某一类设备后端不匹配时过早回退。
+  for _, device_type in ipairs(device_priority) do
+    for _, backend in ipairs(BACKENDS) do
+      local candidates = {}
+      for _, adapter in ipairs(adapters) do
+        if adapter.device_type == device_type and adapter.backend == backend then
+          candidates[#candidates + 1] = adapter
+        end
+      end
+
+      if #candidates > 0 then
+        table.sort(candidates, function(a, b)
+          return adapter_sort_key(a) < adapter_sort_key(b)
+        end)
+        return candidates[1]
+      end
+    end
   end
 
-  local name = adapter.name or "?"
-  -- 状态栏空间有限，截断过长设备名
-  if #name > 28 then
-    name = name:sub(1, 25) .. "..."
-  end
-
-  return string.format("%s|%s|%s", adapter.backend or "?", adapter.device_type or "?", name)
+  wezterm.log_error "未找到符合首选设备类型和后端的 GPU，使用默认适配器。"
+  return nil
 end
 
 return M
