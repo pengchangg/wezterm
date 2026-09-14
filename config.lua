@@ -122,13 +122,13 @@ config.force_reverse_video_cursor = true
 config.window_padding = { left = 12, right = 12, top = 10, bottom = 10 }
 -- 窗口装饰：无原生标题栏，最小化/最大化/关闭并入标签栏，可调整大小
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
--- 集成标题按钮：Windows 靠右；macOS 靠左原生风格
+-- 集成标题按钮：Windows 使用更易辨认的 Gnome 图标，macOS 保持原生风格
 if platform.is_macos then
   config.integrated_title_button_alignment = "Left"
   config.integrated_title_button_style = "MacOsNative"
 else
   config.integrated_title_button_alignment = "Right"
-  config.integrated_title_button_style = "Windows"
+  config.integrated_title_button_style = "Gnome"
 end
 config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
 -- 关闭窗口时始终确认

@@ -21,7 +21,7 @@ local.lua.example # 本机覆盖模板；复制为 local.lua 后使用
 |----|---------|-------|
 | `default_prog` | PATH 中的 PowerShell 7，可由 `local.lua` 覆盖 | **不设置**，跟随系统登录 Shell |
 | 启动菜单 | `Wsl-Arch` + `local.lua` 本机启动项 | `local.lua` 本机启动项（无 WSL） |
-| 标题按钮 | 靠右，`Windows` 风格 | 靠左，`MacOsNative` |
+| 标题按钮 | 靠右，`Gnome` 风格（图标更易辨认） | 靠左，`MacOsNative` |
 | GPU 后端 | Dx12 → Vulkan → Gl | Metal |
 | 快捷键 | `Ctrl+Shift` 等 | 同上 + 常用 `Cmd` 等价绑定 |
 
