@@ -99,7 +99,7 @@ end
 -- 外观
 ------------------------------------------------------------
 -- 配色方案（WezTerm 内置名）
-config.color_scheme = "Tokyo Night"
+config.color_scheme = "Catppuccin Mocha"
 -- 粗体同时加亮 ANSI 颜色
 config.bold_brightens_ansi_colors = "BrightAndBold"
 -- 显示滚动条
@@ -118,19 +118,7 @@ config.cursor_thickness = 1
 -- 光标处反色显示，提高对比度
 config.force_reverse_video_cursor = true
 
--- 终端内容与窗口边缘的内边距（像素）
-config.window_padding = { left = 12, right = 12, top = 10, bottom = 10 }
--- 窗口装饰：无原生标题栏，最小化/最大化/关闭并入标签栏，可调整大小
 config.window_decorations = "INTEGRATED_BUTTONS|RESIZE"
--- 集成标题按钮：Windows 使用更易辨认的 Gnome 图标，macOS 保持原生风格
-if platform.is_macos then
-  config.integrated_title_button_alignment = "Left"
-  config.integrated_title_button_style = "MacOsNative"
-else
-  config.integrated_title_button_alignment = "Right"
-  config.integrated_title_button_style = "Gnome"
-end
-config.integrated_title_buttons = { "Hide", "Maximize", "Close" }
 -- 关闭窗口时始终确认
 config.window_close_confirmation = "AlwaysPrompt"
 -- 这些退出码视为“干净退出”（如 Ctrl+C = 130）
